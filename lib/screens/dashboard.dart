@@ -50,26 +50,28 @@ class _DashboardPageState extends State<DashboardPage> {
       drawer: Drawer(
         child: Center(child: Text("EC-pos")),
       ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: dashboardMenu.length,
-            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+      body: SingleChildScrollView(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: dashboardMenu.length,
+              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return FeatureProduct(
+                  productName: dashboardMenu[index]['name'] as String,
+                  iconName: dashboardMenu[index]['icon'] as IconData,
+                  destinationPage:
+                      dashboardMenu[index]['destinationPage'] as Widget,
+                  randcolor: Color(rnd.nextInt(0xFF1DCC8C)),
+                  index: index,
+                );
+              },
             ),
-            itemBuilder: (BuildContext context, int index) {
-              return FeatureProduct(
-                productName: dashboardMenu[index]['name'] as String,
-                iconName: dashboardMenu[index]['icon'] as IconData,
-                destinationPage:
-                    dashboardMenu[index]['destinationPage'] as Widget,
-                randcolor: Color(rnd.nextInt(0xFF1DCC8C)),
-                index: index,
-              );
-            },
           ),
         ),
       ),
