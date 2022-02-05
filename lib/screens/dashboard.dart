@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-
+import 'add_products.dart';
 import 'multi_form.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -19,7 +19,7 @@ var dashboardMenu = [
   {
     "name": "Add Product",
     "icon": Icons.add_shopping_cart,
-    "destinationPage": MultiForm()
+    "destinationPage": ImagePickerPage()
   },
   {
     "name": "Add Scale",
