@@ -45,7 +45,7 @@ class _DashboardPageState extends State<DashboardPage> {
             Text("EC-pos"),
           ],
         ),
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       drawer: Drawer(
         child: Center(child: Text("EC-pos")),

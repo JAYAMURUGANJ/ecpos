@@ -10,7 +10,7 @@ class EmptyState extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       elevation: 16,
       color: Theme.of(context).cardColor.withOpacity(.95),
-      shadowColor: Theme.of(context).accentColor.withOpacity(.5),
+      shadowColor: Theme.of(context).colorScheme.secondary.withOpacity(.5),
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(

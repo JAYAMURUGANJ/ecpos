@@ -22,13 +22,13 @@ class BillPreviewPage extends StatelessWidget {
             Text("Bill Preview"),
           ],
         ),
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       body: ListView.builder(
         itemCount: data.length,
         itemBuilder: (_, i) => ListTile(
           leading: CircleAvatar(
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             child: Text(
               data[i].productName.substring(0, 1),
               style: TextStyle(color: Colors.white),

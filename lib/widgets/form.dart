@@ -36,7 +36,7 @@ class _ProductFormState extends State<ProductForm> {
                 leading: Icon(Icons.verified_user),
                 elevation: 0,
                 title: Text('Product Details'),
-                backgroundColor: Theme.of(context).accentColor,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 centerTitle: true,
                 actions: <Widget>[
                   IconButton(

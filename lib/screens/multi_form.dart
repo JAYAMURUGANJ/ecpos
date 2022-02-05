@@ -23,7 +23,7 @@ class _MultiFormState extends State<MultiForm> {
             Text("EC-pos"),
           ],
         ),
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

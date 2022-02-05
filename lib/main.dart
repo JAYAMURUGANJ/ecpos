@@ -9,9 +9,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Multi Form',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        accentColor: Color(0xFFCCC01D),
         platform: TargetPlatform.iOS,
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
+            .copyWith(secondary: Color(0xFFCCC01D)),
       ),
       debugShowCheckedModeBanner: false,
       home: DashboardPage(),
