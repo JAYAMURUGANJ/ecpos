@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
+import 'package:intl/intl.dart';
 
 class ImagePickerPage extends StatefulWidget {
   @override
@@ -13,20 +13,9 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   final ImagePicker imgpicker = ImagePicker();
   String imagepath = "";
   File imagefile;
-  //String location = '';
-  String finalDate = '';
-
-  getCurrentDate() {
-    var date = new DateTime.now().toString();
-
-    var dateParse = DateTime.parse(date);
-
-    var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
-
-    setState(() {
-      finalDate = formattedDate.toString();
-    });
-  }
+  Location location = Location();
+  LocationData _currentPosition;
+  String _dateTime;
 
   openImage() async {
     try {
@@ -35,9 +24,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
       if (pickedFile != null) {
         imagepath = pickedFile.path;
         imagefile = File(imagepath);
-        getCurrentDate();
-        //Position position = await _getGeoLocationPosition();
-        //location = 'Lat: ${position.latitude} , Long: ${position.longitude}';
+        getLoc();
         setState(() {});
       } else {
         print("No image is selected.");
@@ -71,7 +58,25 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
                 SizedBox(
                   height: 20,
                 ),
-                Center(child: Text("$finalDate" ?? "")),
+                if (_dateTime != null)
+                  Text(
+                    "Date/Time: $_dateTime",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                SizedBox(
+                  height: 3,
+                ),
+                if (_currentPosition != null)
+                  Text(
+                    "Latitude: ${_currentPosition.latitude}, Longitude: ${_currentPosition.longitude}",
+                    style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ElevatedButton(
                   onPressed: () {
                     openImage();
@@ -83,47 +88,35 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
           ),
         ));
   }
+
+  getLoc() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _currentPosition = await location.getLocation();
+
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      print("${currentLocation.longitude} : ${currentLocation.longitude}");
+      setState(() {
+        _currentPosition = currentLocation;
+        DateTime now = DateTime.now();
+        _dateTime = DateFormat('EEE d MMM kk:mm:ss ').format(now);
+      });
+    });
+  }
 }
-
-// Future<Position> _getGeoLocationPosition() async {
-//   bool serviceEnabled;
-//   LocationPermission permission;
-
-//   // Test if location services are enabled.
-//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//   if (!serviceEnabled) {
-//     // Location services are not enabled don't continue
-//     // accessing the position and request users of the
-//     // App to enable the location services.
-//     await Geolocator.openLocationSettings();
-//     return Future.error('Location services are disabled.');
-//   }
-
-//   permission = await Geolocator.checkPermission();
-//   if (permission == LocationPermission.denied) {
-//     permission = await Geolocator.requestPermission();
-//     if (permission == LocationPermission.denied) {
-//       return Future.error('Location permissions are denied');
-//     }
-//   }
-
-//   if (permission == LocationPermission.deniedForever) {
-//     // Permissions are denied forever, handle appropriately.
-//     return Future.error(
-//         'Location permissions are permanently denied, we cannot request permissions.');
-//   }
-
-//   // When we reach here, permissions are granted and we can
-//   // continue accessing the position of the device.
-//   return await Geolocator.getCurrentPosition(
-//       desiredAccuracy: LocationAccuracy.high);
-// }
-// onPressed: () async {
-//   Uint8List bytes = await imagefile.readAsBytes();
-//   var result = await ImageGallerySaver.saveImage(
-//       bytes,
-//       quality: 60,
-//       name: "new_mage.jpg");
-//   print(result);
-
-// },
